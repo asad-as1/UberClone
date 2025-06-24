@@ -102,7 +102,6 @@ curl -X POST http://localhost:PORT/users/register \
     - `firstname` (string): User's first name (minimum 3 characters).
     - `lastname` (string): User's last name (minimum 3 characters).
   - `email` (string): User's email address (must be a valid email).
-  - `socketId` (string or null): User's socket ID (optional).
 
 **Example:**
 ```json
@@ -166,7 +165,6 @@ The request body must be sent as JSON and include the following fields:
       "lastname": "Doe"
     },
     "email": "john.doe@example.com",
-    "socketId": null
   }
 }
 ```
@@ -228,7 +226,6 @@ curl -X POST http://localhost:PORT/users/login \
     - `firstname` (string): User's first name.
     - `lastname` (string): User's last name.
   - `email` (string): User's email address.
-  - `socketId` (string or null): User's socket ID (optional).
 
 **Example:**
 ```json
@@ -244,4 +241,125 @@ curl -X POST http://localhost:PORT/users/login \
     "socketId": null
   }
 }
+```
+
+---
+
+# User Profile Endpoint Documentation
+
+## Endpoint
+
+`GET /users/profile`
+
+## Description
+
+This endpoint returns the authenticated user's profile information. The request must include a valid JWT token (usually in a cookie or Authorization header).
+
+---
+
+## Authentication
+
+- Requires authentication (JWT token).
+
+---
+
+## Responses
+
+- `user` (object):
+  - `_id` (string): User's unique ID.
+  - `fullname` (object):
+    - `firstname` (string): User's first name.
+    - `lastname` (string): User's last name.
+  - `email` (string): User's email address.
+
+### Success (200 OK)
+
+```json
+{
+  "_id": "665f1c2e2e8b9a001f3e4a12",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "socketId": null
+}
+```
+
+### Unauthorized (401 Unauthorized)
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+---
+
+## Status Codes
+
+- **200**: Profile returned successfully.
+- **401**: Authentication required or invalid token.
+
+---
+
+## Example Request
+
+```bash
+curl -X GET http://localhost:PORT/users/profile \
+  -H "Authorization: Bearer <your_jwt_token>"
+```
+
+---
+
+# User Logout Endpoint Documentation
+
+## Endpoint
+
+`GET /users/logout`
+
+## Description
+
+This endpoint logs out the authenticated user by blacklisting their JWT token and clearing the authentication cookie.
+
+---
+
+## Authentication
+
+- Requires authentication (JWT token).
+
+---
+
+## Responses
+
+### Success (200 OK)
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+### Unauthorized (401 Unauthorized)
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+---
+
+## Status Codes
+
+- **200**: User logged out successfully.
+- **401**: Authentication required or invalid token.
+
+---
+
+## Example Request
+
+```bash
+curl -X GET http://localhost:PORT/users/logout \
+  -H "Authorization: Bearer <your_jwt_token>"
 ```

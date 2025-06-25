@@ -580,17 +580,27 @@ The request body must be sent as JSON and include the following fields:
 
 ### Success (200 OK)
 
+- `token` (string): JWT Token for authentication.
+- `captain` (object): Captain's profile.
+
+**Example:**
 ```json
 {
-  "token": "jwt_token_here",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "captain": {
-    "_id": "captain_id_here",
+    "_id": "665f1c2e2e8b9a001f3e4a99",
     "fullname": {
       "firstname": "Ali",
       "lastname": "Khan"
     },
     "email": "ali.khan@example.com",
-    "status": "active"
+    "status": "inactive",
+    "vehicle": {
+      "vehicleType": "car",
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4
+    }
   }
 }
 ```
@@ -601,7 +611,7 @@ The request body must be sent as JSON and include the following fields:
 {
   "errors": [
     {
-      "msg": "Invalid email",
+      "msg": "Please provide a valid email address",
       "param": "email",
       "location": "body"
     }
@@ -609,7 +619,7 @@ The request body must be sent as JSON and include the following fields:
 }
 ```
 
-### Authentication Error (401 Unauthorized)
+### Authentication Error (400 Bad Request)
 
 ```json
 {
@@ -622,8 +632,7 @@ The request body must be sent as JSON and include the following fields:
 ## Status Codes
 
 - **200**: Captain logged in successfully.
-- **400**: Validation error or missing required fields.
-- **401**: Invalid email or password.
+- **400**: Validation error or invalid credentials.
 - **500**: Internal server error.
 
 ---
@@ -637,37 +646,6 @@ curl -X POST http://localhost:PORT/captains/login \
     "email": "ali.khan@example.com",
     "password": "yourpassword"
   }'
-```
-
----
-
-## Example Response
-
-### Login Success (200 OK)
-
-- `token` (string): JWT Token for authentication.
-- `captain` (object):
-  - `_id` (string): Captain's unique ID.
-  - `fullname` (object):
-    - `firstname` (string): Captain's first name.
-    - `lastname` (string): Captain's last name.
-  - `email` (string): Captain's email address.
-  - `status` (string): Captain's status (`active` or `inactive`).
-
-**Example:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "captain": {
-    "_id": "665f1c2e2e8b9a001f3e4a99",
-    "fullname": {
-      "firstname": "Ali",
-      "lastname": "Khan"
-    },
-    "email": "ali.khan@example.com",
-    "status": "active"
-  }
-}
 ```
 
 ---
@@ -692,43 +670,27 @@ This endpoint returns the authenticated captain's profile information. The reque
 
 ## Responses
 
-- `captain` (object):
-  - `_id` (string): Captain's unique ID.
-  - `fullname` (object):
-    - `firstname` (string): Captain's first name.
-    - `lastname` (string): Captain's last name.
-  - `email` (string): Captain's email address.
-  - `status` (string): Captain's status (`active` or `inactive`).
-  - `vehicle` (object):
-    - `vehicleType` (string): Type of vehicle.
-    - `color` (string): Vehicle color.
-    - `plate` (string): Vehicle plate.
-    - `capacity` (integer): Vehicle capacity.
-  - `location` (object, optional):
-    - `lat` (number or null): Latitude.
-    - `lng` (number or null): Longitude.
-
 ### Success (200 OK)
 
+- `captain` (object): Captain's profile.
+
+**Example:**
 ```json
 {
-  "_id": "665f1c2e2e8b9a001f3e4a99",
-  "fullname": {
-    "firstname": "Ali",
-    "lastname": "Khan"
-  },
-  "email": "ali.khan@example.com",
-  "socketId": null,
-  "status": "inactive",
-  "vehicle": {
-    "vehicleType": "car",
-    "color": "red",
-    "plate": "ABC123",
-    "capacity": 4
-  },
-  "location": {
-    "lat": null,
-    "lng": null
+  "captain": {
+    "_id": "665f1c2e2e8b9a001f3e4a99",
+    "fullname": {
+      "firstname": "Ali",
+      "lastname": "Khan"
+    },
+    "email": "ali.khan@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "vehicleType": "car",
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4
+    }
   }
 }
 ```

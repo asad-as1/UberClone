@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const blacklistTokenSchema = new mongoose.Schema({
-  token: {
-    type: String,
-    required: true,
-    unique: true
-  },
+    token: {
+        type: String,
+        required: true,
+        unique: true
+    },
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: '1d'   // ttl (time to live) for the token, after which it will be automatically removed
+        expires: 86400 // 24 hours in seconds
     }
 });
 
